@@ -1,6 +1,8 @@
 import numpy as np
 import scipy.optimize as op
 import ipdb
+import sys
+sys.path.append("../utils")
 import data_process
 
 def noised_cost_func(w, c1, c2):

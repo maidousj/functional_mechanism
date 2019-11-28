@@ -27,7 +27,6 @@ def load_data(filepath, minmax=None, normalize=False, bias_term=False):
     return X, labels
 
 def test(filepath):
-    ipdb.set_trace()
     X,y = load_data(filepath, minmax=(-1,1), bias_term=True)
     norm = np.linalg.norm(X, axis=1)
     print("# of examples whose norm is already < 1 : ", \

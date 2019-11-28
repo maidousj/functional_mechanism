@@ -1,7 +1,9 @@
 from sklearn.model_selection import RepeatedKFold
+import sys
+sys.path.append("../utils")
 import data_process
 import fm_logistic
-import evluate
+import evaluate
 
 def test(filepath):
     K = 5  # 5-folds cross-validation
@@ -16,7 +18,7 @@ def test(filepath):
         test_X, test_y = X[test_index, :-1], y[test_index]
 
         w, b = fm_logistic.fm_logistic(train_X, train_y, eps)
-        errorRate = evluate.rightNum(test_X, test_y, w, b)/len(test_y)
+        errorRate = evaluate.rightNum(test_X, test_y, w, b)/len(test_y)
 
         errSum += errorRate
 
