@@ -97,14 +97,14 @@ class LR(object):
                 learn_rate = np.exp(-itr) * self.eta  # 学习率指数递减
                 self.update_mini_batch(x, y, learn_rate)
 
-            if self.evaluate() > self.r2: 
+            if self.calcR2() > self.r2: 
                 break
 
 
 def test(filepath):
-    ipdb.set_trace()
     # data
     X, y = data_process.load_data(filepath, minmax=(0,1), bias_term=True)
+    y = y.reshape((y.shape[0], 1))
     sample, dim = X.shape
     
     train_size = int(0.7 * sample)
@@ -120,7 +120,7 @@ def test(filepath):
     
     # parameters
     eta = 0.01
-    max_iter = 200
+    max_iter = 500
     r2 = 0.9
     batch_size = 50
 
@@ -128,9 +128,7 @@ def test(filepath):
     lr = LR(train_X, train_y, valid_X, valid_y, eta, max_iter, r2)
     lr.train(mini_batch=batch_size)
 
-    w = lr.w[:-1]
-    b = lr.w[-1]
-    errorRate = evaluate.rightNum(test_X, test_y, w, b)/len(test_y)
+    errorRate = evaluate.rightNum(test_X, test_y, lr.w)/len(test_y)
     print("error rate = ", errorRate)
 
 if __name__ == "__main__":
