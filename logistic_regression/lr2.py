@@ -16,6 +16,7 @@ def hypothesis(w, X):
     return z, sigmoid(z)
 
 def update(X, y, w, eta):
+    #ipdb.set_trace()
     batch = len(y)
     step = eta/batch
 
@@ -36,14 +37,21 @@ def cost_prime(X, y, w):
     error = np.sum((h-y)*X)
     return error
 
-def logistic_regression(X, y, eta, max_iter):
+def logistic_regression(X, y, eta, max_iter, mini_batch=None):
     m, dims = X.shape
-#    w = np.random.randn(1, dims)
-    w = np.array([[.0,.0]])
+    w = np.random.randn(1, dims)
+#    w = np.array([[.0,.0]])
 
     for i in range(max_iter):
-        w = update(X, y, w, eta)
-        if i%100 == 0:
+        if(mini_batch != None):
+            n = len(X)
+            for j in range(0, n, mini_batch):
+                X_batch = X[j : j+mini_batch]
+                y_batch = y[j : j+mini_batch]
+                w = update(X_batch, y_batch, w, eta)
+        else:
+            w = update(X, y, w, eta)
+        if (i+1)%100 == 0:
             print('w = ', w)
             print('loss = ', cost(X, y, w)) 
     return w
@@ -62,7 +70,7 @@ if __name__ == "__main__":
 
     eta = 0.1
     max_iter = 1000
-    w = logistic_regression(X_train, y_train, eta, max_iter)
+    w = logistic_regression(X_train, y_train, eta, max_iter, mini_batch=10)
     
     z, y_hat = hypothesis(w, X_test)
     y_hat[y_hat>=0.5] = 1
